@@ -1,4 +1,4 @@
---1. First, we'll build 2 tables (Customer Info and Customer Loans) 
+--1. First, we'll build 2 tables (Customer Info and Customer Loans) *Used Claude AI to fill the dataframes
 -- Create customer_info table
 CREATE TABLE customer_info (
     id INT PRIMARY KEY,
@@ -103,7 +103,7 @@ FROM customer_loans;
 ALTER TABLE customer_loans
 ADD first_payment_date DATE NOT NULL;
 ADD origination_date DATE NOT NULL;
-
+ADD loanage INT;
 
 UPDATE customer_loans SET first_payment_date= '2022-11-01' WHERE id="1";
 UPDATE customer_loans SET first_payment_date= '2024-01-01' WHERE id="2";
@@ -117,6 +117,14 @@ UPDATE customer_loans SET first_payment_date= '2023-02-01' WHERE id="9";
 UPDATE customer_loans SET first_payment_date= '2023-07-01' WHERE id="10";
 
 UPDATE customer_loans
-SET origination_date = DATEADD(month, 1, first_payment_date)
-WHERE first_payment_date 
+SET origination_date = DATEADD(month, 1, first_payment_date),
+SET loanage = DATEDIFF(month, GETDATE(), origination_date);
+SELECT 
+--Let's get into some statistics. I want to see the Average Balance, Weighted Avgerage Coupon, and remaining term. (This would be typical of a collateralized loan portfolio)
+
+Select 
+    AVG(balance) as average_balance,
+    ROUND(SUM(rate * balance) / SUM(balance), 4) as WAC
+    ROUND(SUM(loanage * balance) / SUM(balance), 4) as WALA
+FROM customer_loans;
 
