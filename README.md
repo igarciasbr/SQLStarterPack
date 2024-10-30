@@ -1,9 +1,10 @@
 # SQLStarterPack
 
-GIT Repo highlighting my basic SQL skills. 
+GIT Repo highlighting my SQL skills. 
 
-There will be other repos with progressively more indepth projects coming soon. 
+Starting at the basicsql.sql, I'm creating a fictional loans database. This contains a number of the basic operations in sql. 
+The sqlqueries.sql file builds on the the basicsql and includes questions and how to do a query that finds the answer.  
 
-Part 1: Basic queries
+I will also include files of the resulting databases. 
 
-Part 2: Mini project
+These queries were tested in postgresql 16. 
