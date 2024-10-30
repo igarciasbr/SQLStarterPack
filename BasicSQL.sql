@@ -133,12 +133,10 @@ UPDATE customer_loans SET loanage= 17 WHERE id=10;
 
 --Let's get into some statistics of our dataset. I want to see the Average Balance, Weighted Avgerage Coupon, and remaining term. (This would be typical of a collateralized loan portfolio)
 
-Select 
+SELECT 
     AVG(balance) as average_balance,
     ROUND(SUM(rate * balance) / SUM(balance), 4) as WAC,
     ROUND(SUM(loanage * balance) / SUM(balance), 4) as WALA,
 FROM customer_loans;
 
---See Intermediate sql queries in the main repo for more. 
---https://github.com/igarciasbr/SQLStarterPack/blob/main/SQLqueries.sql
-
+--Next Section located in https://github.com/igarciasbr/SQLStarterPack/blob/main/SQLqueries.sql
