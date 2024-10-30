@@ -140,5 +140,5 @@ Select
 FROM customer_loans;
 
 --See Intermediate sql queries in the main repo for more. 
-
+--https://github.com/igarciasbr/SQLStarterPack/blob/main/SQLqueries.sql
 
