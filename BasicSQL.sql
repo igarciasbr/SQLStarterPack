@@ -91,40 +91,54 @@ JOIN customer_loans cl ON ci.id = cl.id
 WHERE cl.rate > 5.5
 ORDER BY cl.rate DESC; 
 
---Let's get into some statistics. I want to see the Average Balance, Weighted Avgerage Coupon, and remaining term. (This would be typical of a collateralized loan portfolio)
-
-Select 
-    AVG(balance) as average_balance,
-    ROUND(SUM(rate * balance) / SUM(balance), COUNT(loanid) as WAC
-FROM customer_loans;
-
--- I realized at this point I don't have loan age or remaining term. I'm going to use first payment date -1 month for origination date, then use datediff() to come up with the age.
+-- Going to add first payment date for all the loans to highlight ALTER TABLE
 
 ALTER TABLE customer_loans
-ADD first_payment_date DATE NOT NULL;
-ADD origination_date DATE NOT NULL;
-ADD loanage INT;
+ADD first_payment_date DATE;
 
-UPDATE customer_loans SET first_payment_date= '2022-11-01' WHERE id="1";
-UPDATE customer_loans SET first_payment_date= '2024-01-01' WHERE id="2";
-UPDATE customer_loans SET first_payment_date= '2024-01-01' WHERE id="3"; 
-UPDATE customer_loans SET first_payment_date= '2023-12-01' WHERE id="4";
-UPDATE customer_loans SET first_payment_date= '2023-11-01' WHERE id="5";
-UPDATE customer_loans SET first_payment_date= '2022-06-01' WHERE id="6";
-UPDATE customer_loans SET first_payment_date= '2024-05-01' WHERE id="7";
-UPDATE customer_loans SET first_payment_date= '2023-05-01' WHERE id="8";
-UPDATE customer_loans SET first_payment_date= '2023-02-01' WHERE id="9";
-UPDATE customer_loans SET first_payment_date= '2023-07-01' WHERE id="10";
 
-UPDATE customer_loans
-SET origination_date = DATEADD(month, 1, first_payment_date),
-SET loanage = DATEDIFF(month, GETDATE(), origination_date);
-SELECT 
---Let's get into some statistics. I want to see the Average Balance, Weighted Avgerage Coupon, and remaining term. (This would be typical of a collateralized loan portfolio)
+UPDATE customer_loans SET first_payment_date= '2022-11-01' WHERE id=1;
+UPDATE customer_loans SET first_payment_date= '2024-01-01' WHERE id=2;
+UPDATE customer_loans SET first_payment_date= '2024-01-01' WHERE id=3; 
+UPDATE customer_loans SET first_payment_date= '2023-12-01' WHERE id=4;
+UPDATE customer_loans SET first_payment_date= '2023-11-01' WHERE id=5;
+UPDATE customer_loans SET first_payment_date= '2022-06-01' WHERE id=6;
+UPDATE customer_loans SET first_payment_date= '2024-05-01' WHERE id=7;
+UPDATE customer_loans SET first_payment_date= '2023-05-01' WHERE id=8;
+UPDATE customer_loans SET first_payment_date= '2023-02-01' WHERE id=9;
+UPDATE customer_loans SET first_payment_date= '2023-07-01' WHERE id=10;
+
+-- Then I realized I need to add loanage to calc the portfolio wala in the next section.
+
+ALTER TABLE customer_loans
+  ADD loanage INT;
+
+UPDATE customer_loans SET loanage= 24 WHERE id=1;
+UPDATE customer_loans SET loanage= 9 WHERE id=2;
+UPDATE customer_loans SET loanage= 9 WHERE id=3;
+UPDATE customer_loans SET loanage= 11 WHERE id=4;
+UPDATE customer_loans SET loanage= 12 WHERE id=5;
+UPDATE customer_loans SET loanage= 28 WHERE id=6;
+UPDATE customer_loans SET loanage= 5 WHERE id=7;
+UPDATE customer_loans SET loanage= 19 WHERE id=8;
+UPDATE customer_loans SET loanage= 20 WHERE id=9;
+UPDATE customer_loans SET loanage= 17 WHERE id=10;
+
+
+--TODO: This section needs debugging. I tried using datediff, datesub and dat add, but something wasn't quite right.
+--UPDATE customer_loans
+--SET origination_date = DATEADD(month, -1, first_payment_date),
+--SET loanage = DATEDIFF(month, GETDATE(), origination_date);
+
+
+--Let's get into some statistics of our dataset. I want to see the Average Balance, Weighted Avgerage Coupon, and remaining term. (This would be typical of a collateralized loan portfolio)
 
 Select 
     AVG(balance) as average_balance,
-    ROUND(SUM(rate * balance) / SUM(balance), 4) as WAC
-    ROUND(SUM(loanage * balance) / SUM(balance), 4) as WALA
+    ROUND(SUM(rate * balance) / SUM(balance), 4) as WAC,
+    ROUND(SUM(loanage * balance) / SUM(balance), 4) as WALA,
 FROM customer_loans;
+
+--See Intermediate sql queries in the main repo for more. 
+
 
