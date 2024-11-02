@@ -44,12 +44,13 @@ ORDER BY rate DESC
 
 --This is great, but that WAC column looks repetitive. Let's use the CASE function and compare balance as well. 
 
-WITH portavgs AS (
+WITH portavgs(average_balance, WAC) AS (
    SELECT 
     ROUND(AVG(balance), 2) as average_balance,
     ROUND(SUM(rate * balance) / SUM(balance), 4) as WAC,
     ROUND(SUM(loanage * balance) / SUM(balance), 4) as WALA
-   FROM customer_loans)
+   FROM customer_loans
+   )
 SELECT 
     ci.firstname,
     ci.lastname,
@@ -59,7 +60,7 @@ SELECT
         WHEN cl.rate > portavgs.WAC THEN 'Rate ABOVE portfolio WAC'
         WHEN cl.rate < portavgs.WAC THEN 'Rate BELOW portfoio WAC'
         ELSE 'Meets Average'
-    END AS rate_comparison
+    END AS rate_comparison,
     CASE 
         WHEN cl.balance > portavgs.average_balance THEN 'Balance ABOVE portfolio AVG'
         WHEN cl.balance < portavgs.average_balance THEN 'Balance BELOW portfoio AVG'
@@ -75,13 +76,12 @@ ORDER BY rate DESC
 CREATE TABLE borrower_credit_info (
     id INT PRIMARY KEY,
     loanid VARCHAR(10),
-	reported_income DECIMAL(10,2),
+    reported_income DECIMAL(10,2),
     credit_score INT
 );
 
 -- Insert sample data into borrower_credit_info
 INSERT INTO borrower_credit_info (id, loanid, reported_income, credit_score) VALUES
-
 (1, 'L001', 100000.00, 725),
 (2, 'L002', 113000.00, 675),
 (3, 'L003', 80000.00, 668),
