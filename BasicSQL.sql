@@ -49,9 +49,9 @@ INSERT INTO customer_loans (id, loanid, balance, rate, term) VALUES
 
 SELECT * FROM customer_loans;
 
-UPDATE customer_loans SET loanid= 'S123' WHERE loanid="L005";
-UPDATE customer_loans SET loanid= 'B726' WHERE loanid="L009";
-UPDATE customer_loans SET loanid= 'C301' WHERE loanid="L010";
+UPDATE customer_loans SET loanid= 'S123' WHERE loanid='L005';
+UPDATE customer_loans SET loanid= 'B726' WHERE loanid='L009';
+UPDATE customer_loans SET loanid= 'C301' WHERE loanid='L010';
 
 SELECT * FROM customer_loans;
 
@@ -61,23 +61,23 @@ SELECT * FROM customer_loans;
 --2. Progression of Basic queries using above tables. I'm going to use the order of operations the SQL engine uses as a guide.  
 -- FROM, JOIN, WHERE, GROUP BY, HAVING, SELECT, DISTINCT, ORDER BY, and finally, LIMIT/OFFSET
 
--- Select all records from the customer_info table.
-SELECT * 
-FROM customer_info;  
+-- Count the numbr of loans from the customer_loan table. - should be 9 since we removed one
+SELECT COUNT(loanid) as loans
+FROM customer_loans;  
 
 -- Select first and last name, email from customer_info
-SELECT firstname,lastname,email
+SELECT CONCAT(firstname, ' ',lastname) as customer_name, email
 FROM customer_info;
 
 --Select same but only where city is from Dallas
-SELECT firstname,lastname,email
+SELECT CONCAT(firstname, ' ',lastname), city, email
 FROM customer_info 
-WHERE city = "Dallas";
+WHERE city = 'Dallas';
 
 --Select first, last name, and city where the city starts with the letter "P".
-SELECT firstname,lastname,email
+SELECT CONCAT(firstname, ' ',lastname), city, email
 FROM customer_info 
-WHERE city LIKE "P%";
+WHERE city LIKE 'P%';
 
 --Let's target some Refi customers. Let's find which customers have mortgage rates above 5.5%. We're going to need a JOIN here
 
@@ -135,8 +135,8 @@ UPDATE customer_loans SET loanage= 17 WHERE id=10;
 
 SELECT 
     AVG(balance) as average_balance,
-    ROUND(SUM(rate * balance) / SUM(balance), 4) as WAC,
-    ROUND(SUM(loanage * balance) / SUM(balance), 4) as WALA,
+    ROUND(SUM(rate/100.0 * balance) / SUM(balance), 4) as WAC,
+    ROUND(SUM(loanage * balance) / SUM(balance), 4) as WALA
 FROM customer_loans;
 
 --Next Section located in https://github.com/igarciasbr/SQLStarterPack/blob/main/SQLqueries.sql
