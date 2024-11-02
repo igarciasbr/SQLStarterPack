@@ -70,13 +70,30 @@ JOIN customer_info ci ON cl.id = ci.id
 CROSS JOIN portavgs  
 ORDER BY rate DESC
 
--- For the purpose of this exercise and to do some Join and Subquery work We're going to build a new table called borrower_credi_info. It will include credit score and some liabilities. 
+-- For the purpose of this exercise and to do some Join and Subquery work We're going to build a new table called borrower_credi_info. It will include credit score and some reported income. 
 
 CREATE TABLE borrower_credit_info (
-    loanid VARCHAR(10) PRIMARY KEY,
-    total_liabilities DECIMAL(10,2),
-    credit_score INT(),
-    FOREIGN KEY (id) REFERENCES customer_info(id)
-    FOREIGN KEY (loanid) REFERENCES customer_loans(id)
+    id INT PRIMARY KEY,
+    loanid VARCHAR(10),
+	reported_income DECIMAL(10,2),
+    credit_score INT
 );
 
+-- Insert sample data into borrower_credit_info
+INSERT INTO borrower_credit_info (id, loanid, reported_income, credit_score) VALUES
+
+(1, 'L001', 100000.00, 725),
+(2, 'L002', 113000.00, 675),
+(3, 'L003', 80000.00, 668),
+(4, 'L004', 75000.00, 750),
+(5, 'L005', 200000.00, 600),
+(6, 'L006', 30000.00, 775),
+(7, 'L007', Null, 675),
+(8, 'L008', 135000.00, 725),
+(9, 'L009', 245000.00, 575),
+(10, 'L010', 121000.00, 771);
+
+SELECT * FROM borrower_credit_info;
+
+-- Next stop is the Joins query page.. 
+--https://github.com/igarciasbr/SQLStarterPack/blob/main/JoinQueries.sql
